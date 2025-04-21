@@ -1,0 +1,44 @@
+.castWrapper {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .actor {
+    background-color: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 10px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .actor:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  .actorImage {
+    width: 100px;
+    height: 150px;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .actorName {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 5px 0;
+  }
+  
+  .actorCharacter {
+    font-size: 0.9rem;
+    color: #555;
+  }
+  
+  
+  
+  
