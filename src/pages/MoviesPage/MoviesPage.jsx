@@ -6,39 +6,54 @@ import styles from './MoviesPage.module.css';
 
 export const MoviesPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  const query = searchParams.get('query') ?? ''; 
+  const query = searchParams.get('query') ?? '';
+  const [inputValue, setInputValue] = useState(query);
   const [movies, setMovies] = useState([]);
-  const loading = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  
   useEffect(() => {
     if (query === '') {
-      setMovies([]); 
+      setMovies([]);
       return;
     }
 
     const getData = async () => {
+      setLoading(true);
       try {
         const movies = await searchMovies(query, 1);
         setMovies(movies);
       } catch (error) {
-        console.log(error);
+        console.error('Error fetching movies:', error);
+      } finally {
+        setLoading(false);
       }
     };
+
     getData();
   }, [query]);
 
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (inputValue.trim() === '') {
+      setSearchParams({});
+      setMovies([]);
+      return
+    };
+    setSearchParams({ query: inputValue.trim() });
+  };
+
   return (
     <div className={styles.moviesWrapper}>
-      <form className={styles.searchForm}>
+      <form className={styles.searchForm} onSubmit={handleSubmit}>
         <input
           className={styles.searchInput}
           type="text"
-          value={query}
-          onChange={e => {
-            searchParams.set('query', e.target.value);
-            setSearchParams(searchParams);
-          }}
+          value={inputValue}
+          onChange={handleInputChange}
           placeholder="Search for movies"
         />
         <button className={styles.searchButton} type="submit">
@@ -46,7 +61,7 @@ export const MoviesPage = () => {
         </button>
       </form>
 
-      {loading && <div className="spinner"></div>}
+      {loading && <div className={styles.spinner}>Loading...</div>}
 
       <MovieList movies={movies} />
     </div>
