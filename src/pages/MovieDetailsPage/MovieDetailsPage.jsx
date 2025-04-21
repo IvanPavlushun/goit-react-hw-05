@@ -1,14 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
-import { getMovieDetails, getMovieCredits, getMovieReviews } from '../../services/api';
+import { getMovieDetails } from '../../services/api';
 import { Link, NavLink, Outlet } from 'react-router-dom';
 import styles from './MovieDetailsPage.module.css';
 
 export const MovieDetailsPage = () => {
   const { movieId } = useParams();
   const [movieDetails, setMovieDetails] = useState(null);
-  const [credits, setCredits] = useState([]);
-  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const location = useLocation();
   const goBackRef = useRef(location.state ?? `/movies`);
@@ -18,12 +16,7 @@ export const MovieDetailsPage = () => {
       try {
         setLoading(true);
         const details = await getMovieDetails(movieId);
-        const credits = await getMovieCredits(movieId);
-        const reviews = await getMovieReviews(movieId, 1);
-
         setMovieDetails(details);
-        setCredits(credits);
-        setReviews(reviews);
       } catch (error) {
         console.log(error);
       } finally {
@@ -54,7 +47,7 @@ export const MovieDetailsPage = () => {
         <NavLink to='cast'>Cast</NavLink>
         <NavLink to='reviews'>Reviews</NavLink>
       </nav>
-      <Outlet context={{ credits, reviews }} />
+      <Outlet />
     </div>
   );
 };

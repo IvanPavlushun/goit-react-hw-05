@@ -1,9 +1,23 @@
-import React from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getMovieCredits } from '../../services/api';
 import styles from './MovieCast.module.css';
 
 export const MovieCast = () => {
-  const { credits } = useOutletContext();
+  const { movieId } = useParams();
+  const [credits, setCredits] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getMovieCredits(movieId);
+        setCredits(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getData();
+  }, [movieId]);
 
   if (!credits || credits.length === 0) {
     return <div>No cast information available.</div>;

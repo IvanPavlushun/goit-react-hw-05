@@ -1,9 +1,23 @@
-import React from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { getMovieReviews } from '../../services/api';
 import styles from './MovieReviews.module.css';
 
 export const MovieReviews = () => {
-  const { reviews } = useOutletContext();
+  const { movieId } = useParams();
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const data = await getMovieReviews(movieId, 1);
+        setReviews(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getData();
+  }, [movieId]);
 
   if (!reviews || reviews.length === 0) {
     return <div>No reviews available.</div>;
